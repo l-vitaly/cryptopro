@@ -1,0 +1,42 @@
+<bki_request version="3.4" partnerid="90J">
+    <request num="1">
+        <private>
+            <firstname>СЕРГЕЙ</firstname>
+            <lastname>СЕРГЕЕВ</lastname>
+            <middlename>СЕРГЕЕВИЧ</middlename>
+            <birthday>20.01.1975</birthday>
+            <birthplace>МОСКВА</birthplace>
+            <doc>
+                <doctype>1</doctype>
+                <docno>2000000000</docno>
+                <docdate>01.01.2016</docdate>
+                <docplace>ОВД УЛЬЯНОВСКА</docplace>
+            </doc>
+            <gender>1</gender>
+        </private>
+        <reason>1</reason>
+        <application>
+            <consent>1</consent>
+            <consentdate>03.03.2017</consentdate>
+            <consentenddate>04.03.2017</consentenddate>
+            <admcode_inform>1</admcode_inform>
+        </application>
+        <addr_reg>
+            <index>000000</index>
+            <country>RU</country>
+            <city>МОСКВА</city>
+            <street>6 КВАРТАЛ</street>
+            <house>17</house>
+            <flat>48</flat>
+        </addr_reg>
+        <addr_fact>
+            <index>000000</index>
+            <country>RU</country>
+            <city>МОСКВА</city>
+            <street>6 КВАРТАЛ</street>
+            <house>17</house>
+            <flat>48</flat>
+        </addr_fact>
+        <type>30033</type>
+    </request>
+</bki_request>
