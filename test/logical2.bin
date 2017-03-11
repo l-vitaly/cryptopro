@@ -1,8 +1,8 @@
 <bki_request version="3.4" partnerid="90J">
     <request num="1">
         <private>
-            <firstname>СЕРГЕЙ</firstname>
             <lastname>СЕРГЕЕВ</lastname>
+            <firstname>СЕРГЕЙ</firstname>
             <middlename>СЕРГЕЕВИЧ</middlename>
             <birthday>20.01.1975</birthday>
             <birthplace>МОСКВА</birthplace>
