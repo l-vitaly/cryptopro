@@ -89,11 +89,6 @@ var (
 	ErrUpdateHeaderMessage     = errors.New("error updating message header")
 )
 
-//export msgUpdateCallback
-func msgUpdateCallback(pvArg unsafe.Pointer, pbData *C.BYTE, cbData C.DWORD, fFinal bool) bool {
-	return (*Msg)(pvArg).updateCallback(pbData, cbData, fFinal) == nil
-}
-
 type Msg struct {
 	hMsg           C.HCRYPTMSG
 	src            io.Reader
