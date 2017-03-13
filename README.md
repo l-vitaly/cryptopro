@@ -5,7 +5,6 @@ CryptoPro Lib
 
 Скачайте [CryptoPro](https://www.cryptopro.ru/products/csp/downloads) 
 
-
 ## Установка ключа
  
 Проверте, что у текущего пользователя существует хранилище для сертифкатов:
