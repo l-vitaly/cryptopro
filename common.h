@@ -10,8 +10,8 @@
 #   include <wincrypt.h>
 #   include <winerror.h>
 #else
-#   include </opt/cprocsp/include/cpcsp/CSP_WinDef.h>
-#   include </opt/cprocsp/include/cpcsp/CSP_WinCrypt.h>
+#   include <CSP_WinDef.h>
+#   include <CSP_WinCrypt.h>
 #endif
 
 #define MY_ENC_TYPE (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
