@@ -1,7 +1,7 @@
 package cryptopro
 
-//#cgo linux,386 darwin CFLAGS: -I/opt/cprocsp/include/cpcsp
-//#cgo linux,386 darwin LDFLAGS: -L/opt/cprocsp/lib -lcapi10 -lcapi20 -lrdrsup -lssp
+//#cgo linux,amd64,386 darwin CFLAGS: -I/opt/cprocsp/include/cpcsp
+//#cgo 386 darwin LDFLAGS: -L/opt/cprocsp/lib -lcapi10 -lcapi20 -lrdrsup -lssp
 //#cgo linux,amd64 LDFLAGS: -L/opt/cprocsp/lib/amd64 -lcapi10 -lcapi20 -lrdrsup -lssp
 //#cgo linux,386 LDFLAGS: -L/opt/cprocsp/lib/ia32/ -lcapi10 -lcapi20 -lrdrsup -lssp
 //#cgo windows LDFLAGS: -lcrypt32 -lpthread
