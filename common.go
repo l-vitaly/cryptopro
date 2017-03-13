@@ -7,16 +7,7 @@ package cryptopro
 //#cgo windows LDFLAGS: -lcrypt32 -lpthread
 //#include "common.h"
 import "C"
-import (
-	"unsafe"
-
-	"github.com/pkg/errors"
-)
-
-var (
-	ErrCreatingCertificateCtx = errors.New("error a new certificate could not be created")
-	ErrVerifyingSignature     = errors.New("error verifying message signature")
-)
+import "unsafe"
 
 func charPtr(s string) *C.CHAR {
 	if s != "" {

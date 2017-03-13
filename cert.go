@@ -10,6 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+var (
+	ErrCreatingCertificateCtx = errors.New("error a new certificate could not be created")
+)
+
 type Cert struct {
 	pCert C.PCCERT_CONTEXT
 }

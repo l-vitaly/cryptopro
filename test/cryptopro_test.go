@@ -57,7 +57,7 @@ func TestMsgEncode(t *testing.T) {
 	u.AssertNotError(err, "")
 	defer store.Close()
 
-	crt, err := store.GetByThumb("5f08160e7dca8db7b8b3fd1b055a6c4300c37ba6")
+	crt, err := store.GetBySHA1("5f08160e7dca8db7b8b3fd1b055a6c4300c37ba6")
 	u.AssertNotError(err, "")
 	defer crt.Close()
 

@@ -74,8 +74,25 @@ import (
 )
 
 var (
-	GOST_R3411        asn1.ObjectIdentifier = []int{1, 2, 643, 2, 2, 9}
+	GOST_R3411 asn1.ObjectIdentifier = []int{1, 2, 643, 2, 2, 9}
 )
+
+var (
+	ErrVerifyingSignature      = errors.New("error verifying message signature")
+	ErrOpenMessage             = errors.New("error opening message for decoding")
+	ErrBufferOverrun           = errors.New("buffer overrun on decoding")
+	ErrCertListEmpty           = errors.New("signer certificates list is empty")
+	ErrAcquiringCertPrivateKey = errors.New("error acquiring certificate private key")
+	ErrFinalizeMessage         = errors.New("error finalizing message")
+	ErrCloseMessage            = errors.New("error closing message")
+	ErrUpdateBodyMessage       = errors.New("error updating message body")
+	ErrUpdateHeaderMessage     = errors.New("error updating message header")
+)
+
+//export msgUpdateCallback
+func msgUpdateCallback(pvArg unsafe.Pointer, pbData *C.BYTE, cbData C.DWORD, fFinal bool) bool {
+	return (*Msg)(pvArg).updateCallback(pbData, cbData, fFinal) == nil
+}
 
 type Msg struct {
 	hMsg           C.HCRYPTMSG
@@ -119,13 +136,13 @@ func OpenToDecode(src io.Reader, detachedSig ...[]byte) (*Msg, error) {
 		si,            // потоковая информация
 	)
 	if res.hMsg == nil {
-		return nil, errors.New("error opening message for decoding")
+		return nil, ErrOpenMessage
 	}
 	res.src = src
 	res.updateCallback = res.onDecode
 	for i, p := range detachedSig {
 		if !res.update(p, len(p), i == len(detachedSig)-1) {
-			return nil, errors.New("error updating message header")
+			return nil, ErrUpdateHeaderMessage
 		}
 	}
 	return res, nil
@@ -133,7 +150,7 @@ func OpenToDecode(src io.Reader, detachedSig ...[]byte) (*Msg, error) {
 
 func (msg *Msg) onDecode(pbData *C.BYTE, cbData C.DWORD, fFinal bool) error {
 	if int(cbData) > msg.maxN {
-		return errors.New("buffer overrun on decoding")
+		return ErrBufferOverrun
 	}
 	if pbData != nil && cbData > 0 {
 		C.memcpy(msg.data, unsafe.Pointer(pbData), C.size_t(cbData))
@@ -154,7 +171,7 @@ func OpenToEncode(dest io.Writer, options EncodeOptions) (*Msg, error) {
 	res := new(Msg)
 
 	if len(options.Signers) == 0 {
-		return nil, errors.New("signer certificates list is empty")
+		return nil, ErrCertListEmpty
 	}
 	if options.HashAlg == nil {
 		options.HashAlg = GOST_R3411
@@ -178,7 +195,7 @@ func OpenToEncode(dest io.Writer, options EncodeOptions) (*Msg, error) {
 			dwKeySpec  C.DWORD
 		)
 		if 0 == C.CryptAcquireCertificatePrivateKey(signerCert.pCert, 0, nil, &hCryptProv, &dwKeySpec, nil) {
-			return nil, errors.New("error acquiring certificate private key")
+			return nil, ErrAcquiringCertPrivateKey
 		}
 		C.setSignedInfo(signedInfo, C.int(i), hCryptProv, signerCert.pCert, dwKeySpec, (*C.CHAR)(hashOID))
 	}
@@ -192,7 +209,7 @@ func OpenToEncode(dest io.Writer, options EncodeOptions) (*Msg, error) {
 		si,
 	)
 	if res.hMsg == nil {
-		return nil, errors.New("error opening message for encoding")
+		return nil, ErrOpenMessage
 	}
 	res.dest = dest
 	res.updateCallback = res.onEncode
@@ -203,11 +220,11 @@ func OpenToEncode(dest io.Writer, options EncodeOptions) (*Msg, error) {
 func (m *Msg) Close() error {
 	if m.dest != nil {
 		if !m.update([]byte{0}, 0, true) {
-			return errors.New("error finalizing message")
+			return ErrFinalizeMessage
 		}
 	}
 	if C.CryptMsgClose(m.hMsg) == 0 {
-		return errors.New("error closing message")
+		return ErrCloseMessage
 	}
 	if cl, ok := m.dest.(io.Closer); ok {
 		return cl.Close()
@@ -239,7 +256,7 @@ func (m *Msg) Read(buf []byte) (int, error) {
 
 	ok := m.update(buf, nRead, m.eof)
 	if !ok {
-		return m.n, errors.New("error updating message body")
+		return m.n, ErrUpdateBodyMessage
 	}
 	return m.n, m.lastError
 }
@@ -247,7 +264,7 @@ func (m *Msg) Read(buf []byte) (int, error) {
 func (m *Msg) Write(buf []byte) (int, error) {
 	ok := m.update(buf, len(buf), false)
 	if !ok {
-		return 0, errors.New("error updating message body")
+		return 0, ErrUpdateBodyMessage
 	}
 	return len(buf), m.lastError
 }
