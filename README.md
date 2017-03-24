@@ -40,7 +40,7 @@ $ csptest -keyset -check -cont '\\.\HDIMAGE\my1'
 - Установка сертификата
 
 ```
-certmgr -inst -file newkeys.crt -cont '\\.\HDIMAGE\cert1'
+certmgr -inst -file newkeys.crt -cont '\\.\HDIMAGE\my1'
 ```
 
 - Вывод списка сертификатов
